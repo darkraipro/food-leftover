@@ -2,6 +2,7 @@ package com.hungames.cookingsocial.data.model
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
 
 
@@ -13,4 +14,7 @@ interface RegisteredUserDao {
 
     @Query("SELECT username, email, uid FROM users WHERE uid = :uid")
     fun observeUserById(uid: String): LiveData<UserMinimal>
+
+    @Insert
+    suspend fun insertUser(user: RegisteredUser)
 }
