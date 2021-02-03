@@ -1,4 +1,4 @@
-package com.hungames.CookingSocial.ui.login
+package com.hungames.cookingsocial.ui.login
 
 /**
  * Data validation state of the login form.

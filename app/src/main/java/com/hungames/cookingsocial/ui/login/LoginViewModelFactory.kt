@@ -1,9 +1,9 @@
-package com.hungames.CookingSocial.ui.login
+package com.hungames.cookingsocial.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.hungames.CookingSocial.data.LoginDataSource
-import com.hungames.CookingSocial.data.LoginRepository
+import com.hungames.cookingsocial.data.LoginDataSource
+import com.hungames.cookingsocial.data.LoginRepository
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

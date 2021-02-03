@@ -1,4 +1,4 @@
-package com.hungames.CookingSocial.ui.login
+package com.hungames.cookingsocial.ui.login
 
 /**
  * Authentication result : success (user details) or error message.

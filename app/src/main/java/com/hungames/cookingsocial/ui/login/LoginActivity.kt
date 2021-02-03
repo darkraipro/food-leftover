@@ -1,8 +1,7 @@
-package com.hungames.CookingSocial.ui.login
+package com.hungames.cookingsocial.ui.login
 
 import android.app.Activity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -16,9 +15,8 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.viewModels
 
-import com.hungames.CookingSocial.R
+import com.hungames.cookingsocial.R
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 
 @AndroidEntryPoint

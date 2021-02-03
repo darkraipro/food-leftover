@@ -1,6 +1,6 @@
-package com.hungames.CookingSocial.data
+package com.hungames.cookingsocial.data
 
-import com.hungames.CookingSocial.data.model.LoggedInUser
+import com.hungames.cookingsocial.data.model.LoggedInUser
 import javax.inject.Inject
 
 /**

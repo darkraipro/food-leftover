@@ -1,14 +1,13 @@
-package com.hungames.CookingSocial.ui.login
+package com.hungames.cookingsocial.ui.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
-import androidx.hilt.lifecycle.ViewModelInject
-import com.hungames.CookingSocial.data.LoginRepository
-import com.hungames.CookingSocial.data.Result
+import com.hungames.cookingsocial.data.LoginRepository
+import com.hungames.cookingsocial.data.Result
 
-import com.hungames.CookingSocial.R
+import com.hungames.cookingsocial.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

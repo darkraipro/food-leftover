@@ -1,4 +1,4 @@
-package com.hungames.CookingSocial
+package com.hungames.cookingsocial
 
 import org.junit.Test
 
