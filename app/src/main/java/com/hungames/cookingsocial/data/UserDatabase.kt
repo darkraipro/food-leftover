@@ -6,8 +6,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.hungames.cookingsocial.data.di.DatabaseModule.ApplicationScope
 import com.hungames.cookingsocial.data.model.RegisteredUser
 import com.hungames.cookingsocial.data.model.RegisteredUserDao
+import com.hungames.cookingsocial.util.TAG_LOGIN
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -29,8 +31,13 @@ abstract class UserDatabase: RoomDatabase() {
 
             val dao = database.get().userDao()
 
+                val password = 123456.hashCode().toString()
                 applicationScope.launch {
-                    dao.insertUser(RegisteredUser(password = "123".hashCode().toString(), email = "viet.hungdinh@yahoo.de"))
+                    Timber.tag(TAG_LOGIN).i("DB Callback to insert test user")
+                    dao.insertUser(RegisteredUser(password = password, email = "viet.hungdinh@yahoo.de"))
+                    Timber.tag(TAG_LOGIN).i("DB Callback insert finished. Try to get the user")
+                    val res = dao.getUser("viet.hungdinh@yahoo.de", password)
+                    Timber.tag(TAG_LOGIN).i("Getting user successful: $res")
                 }
         }
     }

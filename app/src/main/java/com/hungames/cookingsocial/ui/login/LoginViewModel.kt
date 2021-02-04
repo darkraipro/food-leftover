@@ -25,7 +25,7 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
         val result = loginRepository.login(username, password)
 
         if (result is Result.Success) {
-            _loginResult.value = LoginResult(success = LoggedInUserView(displayName = result.data.displayName))
+            _loginResult.value = LoginResult(success = LoggedInUserView(displayName = result.data.email))
         } else {
             _loginResult.value = LoginResult(error = R.string.login_failed)
         }

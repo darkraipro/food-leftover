@@ -39,5 +39,6 @@ data class UserMinimal(
     @ColumnInfo(name = "username") val username: String,
     @ColumnInfo(name = "email") val email: String,
     @ColumnInfo(name = "validated") val isValidated: Boolean,
-    @ColumnInfo(name = "dateCreated") val date: Long
+    @ColumnInfo(name = "dateCreated") val date: Long,
+    @ColumnInfo(name = "uid") val uid: String
 )

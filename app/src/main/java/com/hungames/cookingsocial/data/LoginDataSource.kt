@@ -1,6 +1,7 @@
 package com.hungames.cookingsocial.data
 
-import com.hungames.cookingsocial.data.model.LoggedInUser
+import com.hungames.cookingsocial.data.model.RegisteredUser
+import com.hungames.cookingsocial.data.model.UserMinimal
 import java.io.IOException
 import javax.inject.Inject
 
@@ -9,11 +10,10 @@ import javax.inject.Inject
  */
 class LoginDataSource @Inject constructor(){
 
-    fun login(username: String, password: String): Result<LoggedInUser> {
+    fun login(username: String, password: String): Result<UserMinimal> {
         try {
             // TODO: handle loggedInUser authentication
-            val fakeUser = LoggedInUser(java.util.UUID.randomUUID().toString(), "Jane Doe")
-            return Result.Success(fakeUser)
+            return Result.Success(UserMinimal(email="viet.hungdinh@yahoo.de", username = "", isValidated = false, date = 203241, uid = "32441-351-uid"))
         } catch (e: Throwable) {
             return Result.Error(IOException("Error logging in", e))
         }

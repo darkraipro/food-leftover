@@ -1,6 +1,6 @@
 package com.hungames.cookingsocial.data
 
-import com.hungames.cookingsocial.data.model.LoggedInUser
+import com.hungames.cookingsocial.data.model.UserMinimal
 import javax.inject.Inject
 
 /**
@@ -11,7 +11,7 @@ import javax.inject.Inject
 class LoginRepository @Inject constructor(val dataSource: LoginDataSource) {
 
     // in-memory cache of the loggedInUser object
-    var user: LoggedInUser? = null
+    var user: UserMinimal? = null
         private set
 
     val isLoggedIn: Boolean
@@ -28,7 +28,7 @@ class LoginRepository @Inject constructor(val dataSource: LoginDataSource) {
         dataSource.logout()
     }
 
-    fun login(username: String, password: String): Result<LoggedInUser> {
+    fun login(username: String, password: String): Result<UserMinimal> {
         // handle login
         val result = dataSource.login(username, password)
 
@@ -39,7 +39,7 @@ class LoginRepository @Inject constructor(val dataSource: LoginDataSource) {
         return result
     }
 
-    private fun setLoggedInUser(loggedInUser: LoggedInUser) {
+    private fun setLoggedInUser(loggedInUser: UserMinimal) {
         this.user = loggedInUser
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore
