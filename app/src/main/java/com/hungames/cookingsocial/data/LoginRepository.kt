@@ -8,7 +8,7 @@ import javax.inject.Inject
  * maintains an in-memory cache of login status and user credentials information.
  */
 
-class LoginRepository @Inject constructor(val dataSource: LoginDataSource) {
+class LoginRepository @Inject constructor(private val dataSource: LoginDataSource) {
 
     // in-memory cache of the loggedInUser object
     var user: UserMinimal? = null
@@ -28,7 +28,7 @@ class LoginRepository @Inject constructor(val dataSource: LoginDataSource) {
         dataSource.logout()
     }
 
-    fun login(username: String, password: String): Result<UserMinimal> {
+    suspend fun login(username: String, password: String): Result<UserMinimal> {
         // handle login
         val result = dataSource.login(username, password)
 

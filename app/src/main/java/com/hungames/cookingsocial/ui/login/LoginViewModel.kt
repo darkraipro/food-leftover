@@ -4,11 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
+import androidx.lifecycle.viewModelScope
 import com.hungames.cookingsocial.data.LoginRepository
 import com.hungames.cookingsocial.data.Result
 
 import com.hungames.cookingsocial.R
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,7 +22,7 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
-    fun login(username: String, password: String) {
+    fun login(username: String, password: String) = viewModelScope.launch {
         // can be launched in a separate asynchronous job
         val result = loginRepository.login(username, password)
 

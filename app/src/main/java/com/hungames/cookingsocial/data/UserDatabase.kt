@@ -30,14 +30,17 @@ abstract class UserDatabase: RoomDatabase() {
             super.onCreate(db)
 
             val dao = database.get().userDao()
-
-                val password = 123456.hashCode().toString()
+                val password = "123456"
+                val passwordHash = password.hashCode().toString()
                 applicationScope.launch {
-                    Timber.tag(TAG_LOGIN).i("DB Callback to insert test user")
-                    dao.insertUser(RegisteredUser(password = password, email = "viet.hungdinh@yahoo.de"))
+                    Timber.tag(TAG_LOGIN).i("DB Callback! DB has been created. Now to insert test user")
+
+                    // Race condition between insertUser and getUser during startup, because DB will be lazily instantiated if a DAO is needed
+                    // and in current implementation only on LoginDataSource the DAO will be instantiated.
+                    dao.insertUser(RegisteredUser(password = passwordHash, email = "viet.hungdinh@yahoo.de"))
                     Timber.tag(TAG_LOGIN).i("DB Callback insert finished. Try to get the user")
-                    val res = dao.getUser("viet.hungdinh@yahoo.de", password)
-                    Timber.tag(TAG_LOGIN).i("Getting user successful: $res")
+                    val res = dao.getUser("viet.hungdinh@yahoo.de", passwordHash)
+                    Timber.tag(TAG_LOGIN).i("DB Callback Getting user successful: $res")
                 }
         }
     }

@@ -8,7 +8,7 @@ import androidx.room.*
 interface RegisteredUserDao {
 
     @Query("SELECT username, email, uid, dateCreated, validated FROM users WHERE email = :email AND password = :password")
-    fun getUser(email: String, password: String): UserMinimal?
+    suspend fun getUser(email: String, password: String): UserMinimal?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(user: RegisteredUser)
