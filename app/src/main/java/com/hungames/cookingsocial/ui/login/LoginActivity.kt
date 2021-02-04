@@ -14,8 +14,10 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.databinding.DataBindingUtil
 
 import com.hungames.cookingsocial.R
+import com.hungames.cookingsocial.databinding.ActivityLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -24,20 +26,17 @@ class LoginActivity : AppCompatActivity() {
 
     private val loginViewModel: LoginViewModel by viewModels()
 
+    private lateinit var loginDataBinding: ActivityLoginBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_login)
+        loginDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
 
-        val username = findViewById<EditText>(R.id.username)
-        val password = findViewById<EditText>(R.id.password)
-        val login = findViewById<Button>(R.id.login)
-        val loading = findViewById<ProgressBar>(R.id.loading)
-
-        /*
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-                .get(LoginViewModel::class.java)
-         */
+        val username = loginDataBinding.username
+        val password = loginDataBinding.password
+        val login = loginDataBinding.login
+        val loading = loginDataBinding.loading
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
