@@ -1,4 +1,4 @@
-package com.hungames.cookingsocial.ui
+package com.hungames.cookingsocial
 
 import android.app.Application
 import com.hungames.cookingsocial.BuildConfig

@@ -41,8 +41,12 @@ android {
         jvmTarget = '1.8'
         freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
     }
+
+    // allows to use data and view binding depending on use case.
+    // https://developer.android.com/topic/libraries/view-binding#data-binding
     buildFeatures {
         viewBinding true
+        dataBinding true
     }
 }
 

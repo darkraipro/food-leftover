@@ -38,5 +38,6 @@ data class RegisteredUser @JvmOverloads constructor(
 data class UserMinimal(
     @ColumnInfo(name = "username") val username: String,
     @ColumnInfo(name = "email") val email: String,
-    @ColumnInfo(name = "uid") val id: String
+    @ColumnInfo(name = "validated") val isValidated: Boolean,
+    @ColumnInfo(name = "dateCreated") val date: Long
 )

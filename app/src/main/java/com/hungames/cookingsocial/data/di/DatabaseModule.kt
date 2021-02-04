@@ -8,6 +8,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -20,11 +22,29 @@ object DatabaseModule {
     @Retention(AnnotationRetention.RUNTIME)
     annotation class DataSourceLogin
 
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class ApplicationScope
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class FragmentScope
+
     @Singleton
     @Provides
-    fun provideDB(@ApplicationContext context: Context): UserDatabase{
-        return Room.databaseBuilder(context.applicationContext, UserDatabase::class.java, "userDB").build()
+    fun provideDatabase(@ApplicationContext context: Context, callback: UserDatabase.Callback): UserDatabase{
+        return Room.databaseBuilder(context.applicationContext, UserDatabase::class.java, "userDB").fallbackToDestructiveMigration()
+                .addCallback(callback).build()
     }
 
+    @Singleton
+    @Provides
+    fun provideRegisteredUserDao(db: UserDatabase) = db.userDao()
+
+
+    @ApplicationScope
+    @Provides
+    @Singleton
+    fun provideApplicationScope() = CoroutineScope(SupervisorJob())
 
 }
