@@ -1,6 +1,7 @@
-package com.hungames.cookingsocial
+package com.hungames.cookingsocial.ui
 
 import android.app.Application
+import com.hungames.cookingsocial.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
