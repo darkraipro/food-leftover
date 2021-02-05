@@ -1,4 +1,4 @@
-package com.hungames.cookingsocial.ui.map
+package com.hungames.cookingsocial.ui.map.discovery
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,14 +12,14 @@ import com.hungames.cookingsocial.R
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class SecondFragment : Fragment() {
+class DiscoveryFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_second, container, false)
+        return inflater.inflate(R.layout.fragment_discovery, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

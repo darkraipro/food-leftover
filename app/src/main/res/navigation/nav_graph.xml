@@ -7,8 +7,8 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.hungames.cookingsocial.ui.map.FirstFragment"
-        tools:layout="@layout/fragment_first"
+        android:name="com.hungames.cookingsocial.ui.map.location.LocationFragment"
+        tools:layout="@layout/fragment_location"
         android:label="@string/first_fragment_label">
 
         <action
@@ -17,8 +17,8 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.hungames.cookingsocial.ui.map.SecondFragment"
-        tools:layout="@layout/fragment_second"
+        android:name="com.hungames.cookingsocial.ui.map.discovery.DiscoveryFragment"
+        tools:layout="@layout/fragment_discovery"
         android:label="@string/second_fragment_label">
 
         <action
