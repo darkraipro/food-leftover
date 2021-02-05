@@ -39,6 +39,14 @@ class LoginRepository @Inject constructor(private val dataSource: LoginDataSourc
         return result
     }
 
+    suspend fun register(username: String, password: String): Result<UserMinimal> {
+        val result = dataSource.register(username, password)
+        if (result is Result.Success) {
+            setLoggedInUser(result.data)
+        }
+        return result
+    }
+
     private fun setLoggedInUser(loggedInUser: UserMinimal) {
         this.user = loggedInUser
         // If user credentials will be cached in local storage, it is recommended it be encrypted

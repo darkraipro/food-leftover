@@ -1,6 +1,7 @@
 package com.hungames.cookingsocial.ui.login
 
 import android.app.Activity
+import android.content.Intent
 import androidx.lifecycle.Observer
 import android.os.Bundle
 import androidx.annotation.StringRes
@@ -18,6 +19,7 @@ import androidx.databinding.DataBindingUtil
 
 import com.hungames.cookingsocial.R
 import com.hungames.cookingsocial.databinding.ActivityLoginBinding
+import com.hungames.cookingsocial.ui.map.MapActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -37,12 +39,14 @@ class LoginActivity : AppCompatActivity() {
         val password = loginDataBinding.password
         val login = loginDataBinding.login
         val loading = loginDataBinding.loading
+        val register = loginDataBinding.register
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
 
             // disable login button unless both username / password is valid
             login.isEnabled = loginState.isDataValid
+            register.isEnabled = loginState.isDataValid
 
             if (loginState.usernameError != null) {
                 username.error = getString(loginState.usernameError)
@@ -66,6 +70,16 @@ class LoginActivity : AppCompatActivity() {
 
             //Complete and destroy login activity once successful
             finish()
+        })
+
+        loginViewModel.registerResult.observe(this@LoginActivity, Observer {
+            val registerResult = it ?: return@Observer
+            loading.visibility = View.GONE
+            if (registerResult.error != null){
+                showRegisterFailed(registerResult.error)
+
+                // do some work perhaps cleaning fields
+            }
         })
 
         username.afterTextChanged {
@@ -98,6 +112,10 @@ class LoginActivity : AppCompatActivity() {
                 loading.visibility = View.VISIBLE
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
+            register.setOnClickListener{
+                loading.visibility = View.VISIBLE
+                loginViewModel.register(username.text.toString(), password.text.toString())
+            }
         }
     }
 
@@ -110,6 +128,12 @@ class LoginActivity : AppCompatActivity() {
                 "$welcome $displayName",
                 Toast.LENGTH_LONG
         ).show()
+        val navigatingIntent = Intent(this, MapActivity::class.java)
+        startActivity(navigatingIntent)
+    }
+
+    private fun showRegisterFailed(@StringRes errorString: Int){
+        Toast.makeText(applicationContext, errorString, Toast.LENGTH_LONG).show()
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {

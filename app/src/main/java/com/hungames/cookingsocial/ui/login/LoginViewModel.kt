@@ -22,6 +22,9 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
+    private val _registerResult = MutableLiveData<RegisterResult>()
+    val registerResult: LiveData<RegisterResult> = _registerResult
+
     fun login(username: String, password: String) = viewModelScope.launch {
         // can be launched in a separate asynchronous job
         val result = loginRepository.login(username, password)
@@ -40,6 +43,16 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
             _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
         } else {
             _loginForm.value = LoginFormState(isDataValid = true)
+        }
+    }
+
+    fun register(username: String, password: String) = viewModelScope.launch {
+        val result = loginRepository.register(username, password)
+
+        if (result is Result.Success){
+            _loginResult.value = LoginResult(success = LoggedInUserView(result.data.email))
+        } else {
+            _registerResult.value = RegisterResult(error = R.string.register_failed)
         }
     }
 
