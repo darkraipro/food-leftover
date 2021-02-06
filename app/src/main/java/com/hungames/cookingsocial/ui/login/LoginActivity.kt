@@ -16,10 +16,10 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import com.hungames.cookingsocial.MainActivity
 
 import com.hungames.cookingsocial.R
 import com.hungames.cookingsocial.databinding.ActivityLoginBinding
-import com.hungames.cookingsocial.ui.map.MapActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -128,7 +128,7 @@ class LoginActivity : AppCompatActivity() {
                 "$welcome $displayName",
                 Toast.LENGTH_LONG
         ).show()
-        val navigatingIntent = Intent(this, MapActivity::class.java)
+        val navigatingIntent = Intent(this, MainActivity::class.java)
         startActivity(navigatingIntent)
     }
 

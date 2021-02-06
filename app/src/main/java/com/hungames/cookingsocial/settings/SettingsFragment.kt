@@ -1,4 +1,4 @@
-package com.hungames.cookingsocial.ui.map.settings
+package com.hungames.cookingsocial.settings
 
 import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat
