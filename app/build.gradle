@@ -19,12 +19,29 @@ android {
         versionCode 1
         versionName "1.0"
 
+        // because google library maps-location service has too many methods
+        // see link below and what to do additionally (application class etc)
+        // https://developer.android.com/studio/build/multidex
+        multiDexEnabled true
+
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments["room.incremental"] = "true"
             }
         }
+
+        // Set the properties within `local.properties` into a `Properties` class so that values
+        // within `local.properties` (e.g. Maps API key) are accessible in this file.
+        Properties properties = new Properties()
+        if (rootProject.file("local.properties").exists()) {
+            properties.load(rootProject.file("local.properties").newDataInputStream())
+        }
+
+        // Inject the Maps API key into the manifest
+        manifestPlaceholders = [ mapsApiKey : properties.getProperty("MAPS_API_KEY", "") ]
+
     }
 
     buildTypes {
@@ -65,6 +82,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.3'
     implementation 'androidx.navigation:navigation-ui:2.3.3'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -73,11 +91,10 @@ dependencies {
     // HILT DI
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltAndroidXVersion"
     kapt "androidx.hilt:hilt-compiler:$hiltAndroidXVersion"
 
     // ADDITIONAL HILT TO SUPPORT JETPACK COMPONENTS
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltAndroidXVersion"
     implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0-alpha03'
     implementation 'androidx.hilt:hilt-work:1.0.0-alpha03'
     // When using Kotlin.
@@ -109,6 +126,9 @@ dependencies {
 
     // FRAGMENT
     implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
+
+    def multidex_version = "2.0.1"
+    implementation "androidx.multidex:multidex:$multidex_version"
 
 }
 

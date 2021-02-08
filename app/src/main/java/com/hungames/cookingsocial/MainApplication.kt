@@ -1,13 +1,14 @@
 package com.hungames.cookingsocial
 
 import android.app.Application
+import androidx.multidex.MultiDexApplication
 import com.hungames.cookingsocial.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
 
 @HiltAndroidApp
-class MainApplication : Application()//, Configuration.Provider
+class MainApplication : MultiDexApplication()//, Configuration.Provider
 {
 
     override fun onCreate() {
