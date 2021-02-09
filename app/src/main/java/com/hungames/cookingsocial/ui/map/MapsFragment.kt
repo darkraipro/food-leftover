@@ -57,7 +57,6 @@ class MapsFragment : Fragment() {
          * user has installed Google Play services and returned to the app.
          */
         map = googleMap
-        map.moveCamera(CameraUpdateFactory.zoomBy(15f))
         addressResultReceiver = AddressResultReceiver(Handler(Looper.getMainLooper()))
         enableLocationAccess()
         var lastLocation: Location? = null
@@ -72,10 +71,12 @@ class MapsFragment : Fragment() {
                     Toast.makeText(context, "No geo coder available", Toast.LENGTH_LONG).show()
                     return@OnSuccessListener
                 }
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 15f))
                 startJobIntentService(location)
             }).addOnFailureListener(requireActivity()){
                 e -> Timber.tag(TAG_MAP).w("getLastLocation failure: $e")
             }
+            // get Users from cache(DB) if they have one. Update RegisteredUser to contain address
         }else {
             requestPermission()
         }
@@ -112,6 +113,7 @@ class MapsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity().applicationContext)
+        enableLocationAccess()
         mapFragment?.getMapAsync(callback)
     }
 
@@ -141,9 +143,6 @@ class MapsFragment : Fragment() {
             } else {
                 Toast.makeText(context, output, Toast.LENGTH_LONG).show()
             }
-            /*map.apply {
-
-            } */
         }
     }
 }

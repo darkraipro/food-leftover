@@ -61,14 +61,13 @@ class FetchAddressIntentService: JobIntentService() {
             // getCountryName() ("United States", for example)
             // getAddressLine
             val addrFrag = with(addr){
-                (0..maxAddressLineIndex).map { getAddressLine(it) }
+                (0..maxAddressLineIndex).map {
+                    Timber.tag(TAG_MAP).i(getAddressLine(it))
+                    getAddressLine(it) }
             }
             Timber.tag(TAG_MAP).i(addrFrag.joinToString(separator = "\n"))
             deliverResultToReceiver(Constants.SUCCESS_RESULT, addrFrag.joinToString(separator = "\n"))
         }
-
-
-
 
     }
 

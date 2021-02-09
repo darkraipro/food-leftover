@@ -1,5 +1,6 @@
 package com.hungames.cookingsocial.data.model
 
+import android.location.Address
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -7,7 +8,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import java.text.DateFormat
-import java.util.UUID
+import java.util.*
 
 @Parcelize
 @Entity(tableName = "users", indices = [Index(value = ["email"], unique = true)])
@@ -28,7 +29,10 @@ data class RegisteredUser @JvmOverloads constructor(
     val id: String = UUID.randomUUID().toString(),
 
     @ColumnInfo(name = "dateCreated")
-    val date: Long = System.currentTimeMillis()
+    val date: Long = System.currentTimeMillis(),
+
+    @ColumnInfo(name = "address")
+    val address: Address? = null
 ) : Parcelable {
     val createDateFormatted: String
         get() = DateFormat.getDateTimeInstance().format(date)
