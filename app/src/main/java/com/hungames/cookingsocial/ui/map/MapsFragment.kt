@@ -18,7 +18,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
@@ -30,10 +31,14 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.OnSuccessListener
 import com.hungames.cookingsocial.R
+import com.hungames.cookingsocial.data.model.UserNeighbors
 import com.hungames.cookingsocial.util.Constants
 import com.hungames.cookingsocial.util.TAG_MAP
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
 import timber.log.Timber
+import java.util.*
+import javax.inject.Inject
 
 
 // No need for Data Binding
@@ -44,6 +49,10 @@ class MapsFragment : Fragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var addressResultReceiver: AddressResultReceiver
     private val REQUEST_LOCATION_PERMISSION = 1
+    private val mapViewModel: MapsViewModel by viewModels()
+
+    private val job = Job()
+    private val mapScope = CoroutineScope(Dispatchers.IO + job)
 
     @SuppressLint("MissingPermission")
     private val callback = OnMapReadyCallback { googleMap ->
@@ -59,14 +68,12 @@ class MapsFragment : Fragment() {
         map = googleMap
         addressResultReceiver = AddressResultReceiver(Handler(Looper.getMainLooper()))
         enableLocationAccess()
-        var lastLocation: Location? = null
         if (hasPermission()){
             fusedLocationClient.lastLocation.addOnSuccessListener(requireActivity(), OnSuccessListener { location: Location? ->
                 if (location==null){
                     Timber.tag(TAG_MAP).w("onSuccess task location: null")
                     return@OnSuccessListener
                 }
-                lastLocation = location
                 if (!Geocoder.isPresent()){
                     Toast.makeText(context, "No geo coder available", Toast.LENGTH_LONG).show()
                     return@OnSuccessListener
@@ -76,10 +83,10 @@ class MapsFragment : Fragment() {
             }).addOnFailureListener(requireActivity()){
                 e -> Timber.tag(TAG_MAP).w("getLastLocation failure: $e")
             }
-            // get Users from cache(DB) if they have one. Update RegisteredUser to contain address
         }else {
             requestPermission()
         }
+
     }
 
     private fun startJobIntentService(location: Location){
@@ -88,7 +95,6 @@ class MapsFragment : Fragment() {
             putExtra(Constants.RECEIVER, addressResultReceiver)
         }
         FetchAddressIntentService.enqueueWork(requireContext(), intent, Constants.ADDR_RECEIVER_JOB_ID)
-
     }
 
 
@@ -113,7 +119,12 @@ class MapsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity().applicationContext)
-        enableLocationAccess()
+
+        val geoCoder = Geocoder(context, Locale.getDefault())
+        // googlemap will be used when it has finished loading by making sure, that pointOfInterests is changed only initially
+        mapViewModel.pointOfInterests.observe(viewLifecycleOwner, {
+            setMarker(geoCoder, it)
+        })
         mapFragment?.getMapAsync(callback)
     }
 
@@ -141,7 +152,25 @@ class MapsFragment : Fragment() {
             if (resultCode == Constants.FAILURE_RESULT){
                 return
             } else {
-                Toast.makeText(context, output, Toast.LENGTH_LONG).show()
+                Timber.tag(TAG_MAP).i(output)
+                val addressParts = output!!.split(",")
+                val location = addressParts[1].trim().split(" ")[1]
+                Timber.tag(TAG_MAP).i(location)
+                mapViewModel.getNearbyUsers(location)
+            }
+        }
+    }
+
+    private fun setMarker(geoCoder: Geocoder, lst: List<UserNeighbors>){
+        for (user in lst){
+            val address = geoCoder.getFromLocationName("${user.street}, ${user.postal} ${user.city}, ${user.country}", 1)
+            if (address.isNotEmpty()){
+                val latlng = LatLng(address[0].latitude, address[0].longitude)
+
+                // map must be executed on the main thread
+                map.addMarker(MarkerOptions().position(latlng))
+
+                // customize the marker to add additional info
             }
         }
     }

@@ -31,8 +31,17 @@ data class RegisteredUser @JvmOverloads constructor(
     @ColumnInfo(name = "dateCreated")
     val date: Long = System.currentTimeMillis(),
 
-    @ColumnInfo(name = "address")
-    val address: Address? = null
+    @ColumnInfo(name = "street")
+    val street: String = "",
+
+    @ColumnInfo(name = "postal")
+    val postal: String = "",
+
+    @ColumnInfo(name = "city")
+    val city: String = "",
+
+    @ColumnInfo(name = "country")
+    val country: String = ""
 ) : Parcelable {
     val createDateFormatted: String
         get() = DateFormat.getDateTimeInstance().format(date)
@@ -45,4 +54,14 @@ data class UserMinimal(
     @ColumnInfo(name = "validated") val isValidated: Boolean,
     @ColumnInfo(name = "dateCreated") val date: Long,
     @ColumnInfo(name = "uid") val uid: String
+)
+
+data class UserNeighbors(
+    @ColumnInfo(name = "username") val username: String,
+    @ColumnInfo(name = "email") val email: String,
+    @ColumnInfo(name = "validated") val isValidated: Boolean,
+    @ColumnInfo(name = "street") val street: String,
+    @ColumnInfo(name = "postal") val postal: String,
+    @ColumnInfo(name = "city") val city: String,
+    @ColumnInfo(name = "country") val country: String
 )

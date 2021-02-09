@@ -3,6 +3,7 @@ package com.hungames.cookingsocial.data.di
 import android.content.Context
 import androidx.room.Room
 import com.hungames.cookingsocial.data.UserDatabase
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,5 +47,6 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideApplicationScope() = CoroutineScope(SupervisorJob())
+
 
 }
