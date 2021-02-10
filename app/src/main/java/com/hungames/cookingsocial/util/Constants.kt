@@ -10,5 +10,11 @@ object Constants {
     const val RECEIVER = "RECEIVER"
     const val RESULT_DATA_KEY = "RESULT_DATA_KEY"
     const val ADDR_RECEIVER_JOB_ID = 1000
+}
 
+enum class NutritionType{
+    ALL,
+    MEAT,
+    VEGETARIAN,
+    VEGAN;
 }

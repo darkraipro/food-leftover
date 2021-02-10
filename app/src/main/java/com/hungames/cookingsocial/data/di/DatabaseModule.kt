@@ -40,6 +40,10 @@ object DatabaseModule {
 
     @Singleton
     @Provides
+    fun provideDishesDao(db: UserDatabase) = db.dishesDao()
+
+    @Singleton
+    @Provides
     fun provideRegisteredUserDao(db: UserDatabase) = db.userDao()
 
 

@@ -2,6 +2,7 @@ package com.hungames.cookingsocial.data
 
 import android.location.Address
 import androidx.room.TypeConverter
+import com.hungames.cookingsocial.util.NutritionType
 import java.util.*
 
 class Converters {
@@ -36,4 +37,10 @@ class Converters {
         ad.setAddressLine(0, addressParts[0])
         return ad
     }
+
+    @TypeConverter
+    fun toNutritionType(value: Int) = enumValues<NutritionType>()[value]
+
+    @TypeConverter
+    fun fromNutritionType(value: NutritionType) = value.ordinal
 }

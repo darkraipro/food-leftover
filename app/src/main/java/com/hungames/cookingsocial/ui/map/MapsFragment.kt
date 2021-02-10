@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
@@ -28,6 +29,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.OnSuccessListener
 import com.hungames.cookingsocial.R
@@ -39,6 +41,7 @@ import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.HashMap
 
 
 // No need for Data Binding
@@ -51,8 +54,8 @@ class MapsFragment : Fragment() {
     private val REQUEST_LOCATION_PERMISSION = 1
     private val mapViewModel: MapsViewModel by viewModels()
 
-    private val job = Job()
-    private val mapScope = CoroutineScope(Dispatchers.IO + job)
+    // keep the markers to later reuse them
+    private var mapMarkers: HashMap<Marker, UserNeighbors> = HashMap()
 
     @SuppressLint("MissingPermission")
     private val callback = OnMapReadyCallback { googleMap ->
@@ -86,7 +89,14 @@ class MapsFragment : Fragment() {
         }else {
             requestPermission()
         }
+        map.setOnInfoWindowClickListener(infoWindowClick)
 
+    }
+
+    private val infoWindowClick = GoogleMap.OnInfoWindowClickListener{ marker ->
+        // TODO: navigate to another fragment called Dashboard to show more info about the user and its offers
+        val user = mapMarkers[marker]
+        if (user != null) findNavController().navigate(MapsFragmentDirections.actionNavigationMapsToNavigationDetail(user))
     }
 
     private fun startJobIntentService(location: Location){
@@ -128,6 +138,9 @@ class MapsFragment : Fragment() {
         mapFragment?.getMapAsync(callback)
     }
 
+
+    // TODO: add function to help users to activate location in case they forgot -> place the method in onViewCreated
+
     @SuppressLint("MissingPermission")
     private fun enableLocationAccess(){
         if (hasPermission()){
@@ -168,9 +181,12 @@ class MapsFragment : Fragment() {
                 val latlng = LatLng(address[0].latitude, address[0].longitude)
 
                 // map must be executed on the main thread
-                map.addMarker(MarkerOptions().position(latlng))
+                val username = if (user.username.isNotEmpty()) user.username else "Unknown username"
 
-                // customize the marker to add additional info
+                // TODO: more customization options, e.g. what kind of kitchen do you offer even filtering options
+                mapMarkers[map.addMarker(MarkerOptions().position(latlng).title(username).snippet(user.userDesc))] =
+                    user
+
             }
         }
     }

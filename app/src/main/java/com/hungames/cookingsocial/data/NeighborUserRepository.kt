@@ -1,6 +1,7 @@
 package com.hungames.cookingsocial.data
 
 import com.hungames.cookingsocial.data.model.RegisteredUserDao
+import com.hungames.cookingsocial.data.model.UserMinimal
 import com.hungames.cookingsocial.data.model.UserNeighbors
 import com.hungames.cookingsocial.util.TAG_MAP
 import timber.log.Timber
@@ -24,5 +25,4 @@ class NeighborUserRepository @Inject constructor(private val dao: RegisteredUser
             Result.Error(IOException("No users for given location found."))
         }
     }
-
 }

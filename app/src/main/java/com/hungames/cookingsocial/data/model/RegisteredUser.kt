@@ -41,7 +41,10 @@ data class RegisteredUser @JvmOverloads constructor(
     val city: String = "",
 
     @ColumnInfo(name = "country")
-    val country: String = ""
+    val country: String = "",
+
+    @ColumnInfo(name = "userDescription")
+    val userDescription: String = ""
 ) : Parcelable {
     val createDateFormatted: String
         get() = DateFormat.getDateTimeInstance().format(date)
@@ -56,6 +59,7 @@ data class UserMinimal(
     @ColumnInfo(name = "uid") val uid: String
 )
 
+@Parcelize
 data class UserNeighbors(
     @ColumnInfo(name = "username") val username: String,
     @ColumnInfo(name = "email") val email: String,
@@ -63,5 +67,7 @@ data class UserNeighbors(
     @ColumnInfo(name = "street") val street: String,
     @ColumnInfo(name = "postal") val postal: String,
     @ColumnInfo(name = "city") val city: String,
-    @ColumnInfo(name = "country") val country: String
-)
+    @ColumnInfo(name = "country") val country: String,
+    @ColumnInfo(name = "uid") val uid: String,
+    @ColumnInfo(name = "userDescription") val userDesc: String
+): Parcelable
