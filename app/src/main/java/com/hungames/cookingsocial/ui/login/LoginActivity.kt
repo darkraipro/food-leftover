@@ -21,11 +21,13 @@ import com.hungames.cookingsocial.MainActivity
 import com.hungames.cookingsocial.R
 import com.hungames.cookingsocial.databinding.ActivityLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Singleton
 
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
+    @Singleton
     private val loginViewModel: LoginViewModel by viewModels()
 
     private lateinit var loginDataBinding: ActivityLoginBinding

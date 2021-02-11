@@ -2,6 +2,11 @@ package com.hungames.cookingsocial.util
 
 const val TAG_LOGIN = "LOGIN"
 const val TAG_MAP = "MAP"
+const val TAG_DISH = "DISH"
+
+object IntentSignals{
+    const val USER_DATA = "USER_DATA"
+}
 
 object Constants {
     const val SUCCESS_RESULT = 1

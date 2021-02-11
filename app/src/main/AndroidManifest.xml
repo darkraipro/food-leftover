@@ -45,8 +45,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.detail.DetailActivity"
+            android:label="DetailActivity" />
 
-        <!-- BIND JOB SERVICE or crash on Android Orea and onwards -->
+        <!-- BIND JOB SERVICE or crash on Android Oreo and onwards -->
         <service android:name=".ui.map.FetchAddressIntentService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE"/>

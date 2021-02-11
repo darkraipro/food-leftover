@@ -7,17 +7,26 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
+import com.hungames.cookingsocial.data.model.UserNeighbors
 import com.hungames.cookingsocial.databinding.FragmentDetailBinding
+import com.hungames.cookingsocial.util.IntentSignals
+import com.hungames.cookingsocial.util.TAG_DISH
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
+import javax.inject.Inject
 
 /* Add chipgroup to filter out dishes by NutritionType*/
 
 @AndroidEntryPoint
 class DetailFragment : Fragment() {
 
-    private val detailViewModel: DetailViewModel by viewModels()
-    private val detailFragmentArgs: DetailFragmentArgs by navArgs()
+    @Inject
+    lateinit var detailViewModelFactory: DetailViewModel.AssistedFactory
+
+    private val detailViewModel: DetailViewModel by viewModels(){
+        DetailViewModel.provideFactory(detailViewModelFactory, requireActivity().intent.extras?.getParcelable(IntentSignals.USER_DATA))
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,8 +35,9 @@ class DetailFragment : Fragment() {
     ): View {
         val binding = FragmentDetailBinding.inflate(inflater, container, false)
         val textView: TextView = binding.userNameInfo
-
-        val user = detailFragmentArgs.user
+        val intentExtras = requireActivity().intent.extras ?: return binding.root
+        val user = intentExtras.getParcelable<UserNeighbors>(IntentSignals.USER_DATA)
+        Timber.tag(TAG_DISH).i("Fragment - intentExtras: ${intentExtras.getParcelable<UserNeighbors>(IntentSignals.USER_DATA)}")
         detailViewModel.text.observe(viewLifecycleOwner, {
             textView.text = it
         })

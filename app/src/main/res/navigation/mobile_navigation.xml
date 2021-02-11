@@ -12,16 +12,6 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_detail"
-        android:name="com.hungames.cookingsocial.ui.detail.DetailFragment"
-        android:label="@string/title_detail_fragment"
-        tools:layout="@layout/fragment_detail">
-        <argument
-            android:name="user"
-            app:argType="com.hungames.cookingsocial.data.model.UserNeighbors" />
-    </fragment>
-
-    <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.hungames.cookingsocial.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
@@ -30,9 +20,5 @@
         android:id="@+id/navigation_maps"
         android:name="com.hungames.cookingsocial.ui.map.MapsFragment"
         android:label="@string/map_location"
-        tools:layout="@layout/fragment_maps" >
-        <action
-            android:id="@+id/action_navigation_maps_to_navigation_detail"
-            app:destination="@id/navigation_detail" />
-    </fragment>
+        tools:layout="@layout/fragment_maps" />
 </navigation>

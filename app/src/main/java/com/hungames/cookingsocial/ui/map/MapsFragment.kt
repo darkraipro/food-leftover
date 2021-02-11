@@ -32,9 +32,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.OnSuccessListener
+import com.hungames.cookingsocial.MainActivity
 import com.hungames.cookingsocial.R
 import com.hungames.cookingsocial.data.model.UserNeighbors
+import com.hungames.cookingsocial.ui.detail.DetailActivity
 import com.hungames.cookingsocial.util.Constants
+import com.hungames.cookingsocial.util.IntentSignals
 import com.hungames.cookingsocial.util.TAG_MAP
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -54,7 +57,7 @@ class MapsFragment : Fragment() {
     private val REQUEST_LOCATION_PERMISSION = 1
     private val mapViewModel: MapsViewModel by viewModels()
 
-    // keep the markers to later reuse them
+    // keep the markers to later reuse them for displaying user details
     private var mapMarkers: HashMap<Marker, UserNeighbors> = HashMap()
 
     @SuppressLint("MissingPermission")
@@ -96,7 +99,11 @@ class MapsFragment : Fragment() {
     private val infoWindowClick = GoogleMap.OnInfoWindowClickListener{ marker ->
         // TODO: navigate to another fragment called Dashboard to show more info about the user and its offers
         val user = mapMarkers[marker]
-        if (user != null) findNavController().navigate(MapsFragmentDirections.actionNavigationMapsToNavigationDetail(user))
+        if (user != null) {
+            val intent = Intent(activity, DetailActivity::class.java)
+            intent.putExtra(IntentSignals.USER_DATA, user)
+            startActivity(intent)
+        }
     }
 
     private fun startJobIntentService(location: Location){
@@ -174,6 +181,7 @@ class MapsFragment : Fragment() {
         }
     }
 
+    // TODO: What happens if some user live in the same street address? -> Refactor to use MarkerClusterer
     private fun setMarker(geoCoder: Geocoder, lst: List<UserNeighbors>){
         for (user in lst){
             val address = geoCoder.getFromLocationName("${user.street}, ${user.postal} ${user.city}, ${user.country}", 1)
