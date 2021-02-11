@@ -2,6 +2,7 @@ package com.hungames.cookingsocial.ui.detail
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.ui.NavigationUI
 import com.hungames.cookingsocial.R
 import com.hungames.cookingsocial.util.TAG_DISH
 import dagger.hilt.android.AndroidEntryPoint

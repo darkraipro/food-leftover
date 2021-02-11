@@ -2,6 +2,8 @@ package com.hungames.cookingsocial.data
 
 import com.hungames.cookingsocial.data.model.Dishes
 import com.hungames.cookingsocial.data.model.DishesDao
+import com.hungames.cookingsocial.util.TAG_DISH
+import timber.log.Timber
 import javax.inject.Inject
 
 class DishesRepository @Inject constructor(private val dao: DishesDao) {
@@ -10,7 +12,8 @@ class DishesRepository @Inject constructor(private val dao: DishesDao) {
         dao.insertDish(dish)
     }
 
-    fun getDishes(uid: String){
-        dao.getDishes(uid)
+    suspend fun getDishes(uid: String): List<Dishes>? {
+        Timber.tag(TAG_DISH).i("uid: $uid \n Using dao to get dishes")
+        return dao.getDishes(uid)
     }
 }

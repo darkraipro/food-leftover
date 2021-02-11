@@ -30,6 +30,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.044"
+            android:text="@{viewModel.email}"
             tools:text="@string/user_name"/>
 
         <TextView
@@ -39,7 +40,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="8dp"
-            android:text="@{viewModel.text}"
+            android:text="@{viewModel.userDesc}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
