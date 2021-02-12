@@ -2,25 +2,27 @@ package com.hungames.cookingsocial.ui.login
 
 import android.app.Activity
 import android.content.Intent
-import androidx.lifecycle.Observer
 import android.os.Bundle
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
 import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.hungames.cookingsocial.MainActivity
-
 import com.hungames.cookingsocial.R
+import com.hungames.cookingsocial.data.PreferencesManager
 import com.hungames.cookingsocial.databinding.ActivityLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 import javax.inject.Singleton
 
 
@@ -30,12 +32,19 @@ class LoginActivity : AppCompatActivity() {
     @Singleton
     private val loginViewModel: LoginViewModel by viewModels()
 
+    @Inject
+    lateinit var preferenceManager: PreferencesManager
+
+
     private lateinit var loginDataBinding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         loginDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+
+        // Check if user is logged in from previous session
+        lifecycleScope.launch { getLoginStatus() }
 
         val username = loginDataBinding.username
         val password = loginDataBinding.password
@@ -66,6 +75,8 @@ class LoginActivity : AppCompatActivity() {
                 showLoginFailed(loginResult.error)
             }
             if (loginResult.success != null) {
+                // TODO: add more keys and storage to save user profile and get them at appropriate time
+                lifecycleScope.launch { preferenceManager.setLoginStatus(true) }
                 updateUiWithUser(loginResult.success)
                 setResult(Activity.RESULT_OK)
                 finish()
@@ -121,15 +132,25 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private suspend fun getLoginStatus() {
+        if (preferenceManager.preferenceFlow.first().loginStatus) {
+            navigateToMainActivity()
+        }
+    }
+
+
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
-        // TODO : initiate successful logged in experience
         Toast.makeText(
                 applicationContext,
                 "$welcome $displayName",
                 Toast.LENGTH_LONG
         ).show()
+        navigateToMainActivity()
+    }
+
+    private fun navigateToMainActivity(){
         val navigatingIntent = Intent(this, MainActivity::class.java)
         startActivity(navigatingIntent)
     }

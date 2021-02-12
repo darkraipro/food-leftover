@@ -39,6 +39,7 @@ class DetailFragment : Fragment() {
         val binding = FragmentDetailBinding.inflate(inflater, container, false)
         val dishAdapter = DetailAdapter()
         binding.viewModel = detailViewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.recyclerViewDish.apply {
             adapter = dishAdapter
             layoutManager = LinearLayoutManager(requireContext())
