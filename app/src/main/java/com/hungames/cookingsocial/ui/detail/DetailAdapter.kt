@@ -7,11 +7,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.hungames.cookingsocial.data.model.Dishes
 import com.hungames.cookingsocial.databinding.ItemDishBinding
+import com.hungames.cookingsocial.util.TAG_DISH
+import timber.log.Timber
 
 class DetailAdapter: ListAdapter<Dishes, DetailAdapter.DishViewHolder>(DiffCallback()) {
 
     override fun onBindViewHolder(holder: DishViewHolder, position: Int) {
         val currentItem = getItem(position)
+        Timber.tag(TAG_DISH).i("CurrentItem onBindViewHolder: $currentItem")
         holder.bind(currentItem)
     }
 
@@ -24,12 +27,9 @@ class DetailAdapter: ListAdapter<Dishes, DetailAdapter.DishViewHolder>(DiffCallb
 
     class DishViewHolder(private val binding: ItemDishBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(dish: Dishes){
-            binding.apply {
-                textviewDishName.text = dish.dishName
-                textviewDishDesc.text = dish.dishDescription
-                textviewQuantity.text = if (dish.quantity != 1) "${dish.quantity.toString()} dishes left" else "${dish.quantity} dish left"
-                textviewPrice.text = dish.dishPrice.toString()
-            }
+            Timber.tag(TAG_DISH).i("What is the dish to get bind: $dish")
+            binding.dish = dish
+            binding.executePendingBindings()
         }
     }
 

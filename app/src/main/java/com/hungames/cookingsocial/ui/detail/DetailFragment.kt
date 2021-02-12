@@ -44,14 +44,6 @@ class DetailFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
         }
-        detailViewModel.dishes?.observe(viewLifecycleOwner) {
-            dishAdapter.submitList(it)
-        }
-
-
-        val intentExtras = requireActivity().intent.extras ?: return binding.root
-        Timber.tag(TAG_DISH)
-            .i("Fragment - intentExtras: ${intentExtras.getParcelable<UserNeighbors>(IntentSignals.USER_DATA)}")
 
         return binding.root
     }

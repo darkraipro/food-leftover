@@ -60,7 +60,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_dish"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                app:listDish="@{viewModel.dishes}"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:layout_width="wrap_content"

@@ -9,12 +9,16 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.lang.Exception
 
-class DetailViewModel @AssistedInject constructor(private val dishRepository: DishesRepository, @Assisted private val user: UserNeighbors?) : ViewModel() {
+class DetailViewModel @AssistedInject constructor(
+    private val dishRepository: DishesRepository,
+    @Assisted private val user: UserNeighbors?
+) : ViewModel() {
 
 
-    private val _dishes = MutableLiveData<List<Dishes>?>()
-    val dishes: LiveData<List<Dishes>?> = _dishes
+    private val _dishes = MutableLiveData<List<Dishes>>()
+    val dishes: LiveData<List<Dishes>> = _dishes
 
     private val _email = MutableLiveData<String>()
     val email: LiveData<String> = _email
@@ -29,12 +33,21 @@ class DetailViewModel @AssistedInject constructor(private val dishRepository: Di
             _email.value = it.email
             _userDesc.value = it.userDesc
             getDishes(it.uid)
-            Timber.tag(TAG_DISH).i("dishes: ${dishes.value}")
+            Timber.tag(TAG_DISH).i("Viewmodel init fun dishes: ${dishes.value}")
         }
     }
 
     private fun getDishes(uid: String) = viewModelScope.launch {
-        _dishes.value = dishRepository.getDishes(user!!.uid)
+        try {
+            val listResult = dishRepository.getDishes(user!!.uid)
+            if (listResult != null) {
+                _dishes.value = listResult!!
+            } else {
+                _dishes.value = ArrayList()
+            }
+        }catch (e: Exception){
+            _dishes.value = ArrayList()
+        }
     }
 
     @dagger.assisted.AssistedFactory
@@ -42,8 +55,11 @@ class DetailViewModel @AssistedInject constructor(private val dishRepository: Di
         fun create(user: UserNeighbors?): DetailViewModel
     }
 
-    companion object{
-        fun provideFactory(assistedFactory: AssistedFactory, user: UserNeighbors?): ViewModelProvider.Factory = object : ViewModelProvider.Factory{
+    companion object {
+        fun provideFactory(
+            assistedFactory: AssistedFactory,
+            user: UserNeighbors?
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
 
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {

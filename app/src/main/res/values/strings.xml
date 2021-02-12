@@ -31,8 +31,10 @@
     <string name="user_desc">Professional LoL player also passionate cooker.</string>
     <string name="user_name">Tim Lemon</string>
     <string name="dish_desc">Classical carbonara made with Pecorino cheese, Guanciale, Egg and Pepper served with Spaghettoni</string>
-    <string name="quantity_input_hint">Quantity you want to order</string>
+    <string name="quantity_input_hint">Quantity</string>
     <string name="order_continue">Continue with the order</string>
+    <string name="dish_quantity_left">"%d %s"</string>
+    <string name="dish_price_euro">"%.2f Eur"</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
