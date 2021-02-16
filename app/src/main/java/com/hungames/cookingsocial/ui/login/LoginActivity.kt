@@ -135,6 +135,8 @@ class LoginActivity : AppCompatActivity() {
     private suspend fun getLoginStatus() {
         if (preferenceManager.preferenceFlow.first().loginStatus) {
             navigateToMainActivity()
+            setResult(Activity.RESULT_OK)
+            finish()
         }
     }
 

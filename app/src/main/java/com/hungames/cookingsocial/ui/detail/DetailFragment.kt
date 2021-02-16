@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.hungames.cookingsocial.data.model.UserNeighbors
 import com.hungames.cookingsocial.databinding.FragmentDetailBinding
 import com.hungames.cookingsocial.util.IntentSignals
@@ -43,9 +44,33 @@ class DetailFragment : Fragment() {
         binding.recyclerViewDish.apply {
             adapter = dishAdapter
             layoutManager = LinearLayoutManager(requireContext())
-            setHasFixedSize(true)
+            setHasFixedSize(false)
+        }
+        // subscribeUi(dishAdapter)
+        detailViewModel.spinner.observe(viewLifecycleOwner) { show ->
+            binding.spinner.visibility = if (show) View.VISIBLE else View.GONE
+        }
+        detailViewModel.snackbar.observe(viewLifecycleOwner) { text ->
+            text?.let {
+                Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT).show()
+                detailViewModel.onSnackbarShown()
+            }
+        }
+        detailViewModel.dishesFlow.observe(viewLifecycleOwner){
+            Snackbar.make(binding.root, "Finished loading: ${it.toString()}", Snackbar.LENGTH_SHORT).show()
         }
 
         return binding.root
+    }
+
+
+    private fun subscribeUi(adapter: DetailAdapter) {
+        detailViewModel.dishesFlow.observe(viewLifecycleOwner) { list ->
+            if (list != null) {
+                adapter.submitList(list)
+            } else {
+                adapter.submitList(emptyList())
+            }
+        }
     }
 }

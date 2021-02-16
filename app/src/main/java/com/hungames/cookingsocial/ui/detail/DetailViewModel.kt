@@ -7,18 +7,29 @@ import com.hungames.cookingsocial.data.model.UserNeighbors
 import com.hungames.cookingsocial.util.TAG_DISH
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.lang.Exception
 
 class DetailViewModel @AssistedInject constructor(
     private val dishRepository: DishesRepository,
     @Assisted private val user: UserNeighbors?
 ) : ViewModel() {
 
+    private val listOfFood = listOf<Dishes>(
+        Dishes(10, "test", "Testfood", "testDesc", 10.50f, quantity = 4),
+        Dishes(11, "test2", "Testfood2", "testDesc", 9.45f, quantity = 11)
+    )
+    private val _spinner = MutableLiveData<Boolean>()
+    val spinner: LiveData<Boolean> = _spinner
+
+    private val _snackbar = MutableLiveData<String?>()
+    val snackbar: LiveData<String?> = _snackbar
 
     private val _dishes = MutableLiveData<List<Dishes>>()
     val dishes: LiveData<List<Dishes>> = _dishes
+
+    val dishesFlow: LiveData<List<Dishes>> = dishRepository.getDishesFlow(user!!.uid).asLiveData(viewModelScope.coroutineContext + Dispatchers.IO)
 
     private val _email = MutableLiveData<String>()
     val email: LiveData<String> = _email
@@ -32,22 +43,28 @@ class DetailViewModel @AssistedInject constructor(
         user?.let {
             _email.value = it.email
             _userDesc.value = it.userDesc
-            getDishes(it.uid)
-            Timber.tag(TAG_DISH).i("Viewmodel init fun dishes: ${dishes.value}")
+            _dishes.value = listOfFood
+            Timber.tag(TAG_DISH).i("Viewmodel init fun dishes: ${dishesFlow.value}")
         }
     }
+
 
     private fun getDishes(uid: String) = viewModelScope.launch {
         try {
             val listResult = dishRepository.getDishes(user!!.uid)
+            Timber.tag(TAG_DISH).i("Getting dishes from Repository done. Result: $listResult")
             if (listResult != null) {
                 _dishes.value = listResult!!
             } else {
                 _dishes.value = ArrayList()
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             _dishes.value = ArrayList()
         }
+    }
+
+    fun onSnackbarShown() {
+        _snackbar.value = null
     }
 
     @dagger.assisted.AssistedFactory

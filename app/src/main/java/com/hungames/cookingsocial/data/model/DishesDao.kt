@@ -12,6 +12,12 @@ interface DishesDao {
     @Query("SELECT * FROM dish WHERE uid = :uid")
     suspend fun getDishes(uid: String): List<Dishes>?
 
+    @Query("SELECT * FROM dish WHERE uid = :uid")
+    fun getDishFlow(uid: String): Flow<List<Dishes>>
+
+    @Query("SELECT * FROM dish")
+    fun getAllDishFlow(): Flow<List<Dishes>>
+
     // if interested buyer wants to order dishes, try to see if the dishes quantity is still valid
     @Query("SELECT * FROM dish WHERE uid = :uid AND id = :id AND quantity >= :quantity")
     suspend fun checkDishQuantity(uid:String, id:Int, quantity: Int): Dishes?

@@ -7,10 +7,15 @@ import com.hungames.cookingsocial.data.model.Dishes
 import com.hungames.cookingsocial.ui.detail.DetailAdapter
 
 
+// when dishes has not been finished loading yet, it is null, thus submit temporarily emptyList
 @BindingAdapter("listDish")
-fun bindRecyclerView(recyclerView: RecyclerView, data: List<Dishes>?){
+fun bindRecyclerView(recyclerView: RecyclerView, dishes: List<Dishes>?){
     val adapter = recyclerView.adapter as DetailAdapter
-    adapter.submitList(data)
+    if (dishes != null) {
+        adapter.submitList(dishes)
+    } else {
+        adapter.submitList(emptyList())
+    }
 }
 
 @BindingAdapter("dishQuantity")
