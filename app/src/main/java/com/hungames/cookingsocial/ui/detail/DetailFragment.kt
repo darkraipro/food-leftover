@@ -6,20 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.hungames.cookingsocial.data.model.UserNeighbors
+import com.hungames.cookingsocial.data.model.Dishes
 import com.hungames.cookingsocial.databinding.FragmentDetailBinding
 import com.hungames.cookingsocial.util.IntentSignals
-import com.hungames.cookingsocial.util.TAG_DISH
+import com.hungames.cookingsocial.util.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
-/* Add chipgroup to filter out dishes by NutritionType*/
+// TODO: Add chipgroup to filter out dishes by NutritionType
 
 @AndroidEntryPoint
-class DetailFragment : Fragment() {
+class DetailFragment : Fragment(), DetailAdapter.OnItemClickListener {
+
 
     @Inject
     lateinit var detailViewModelFactory: DetailViewModel.AssistedFactory
@@ -38,7 +41,7 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentDetailBinding.inflate(inflater, container, false)
-        val dishAdapter = DetailAdapter()
+        val dishAdapter = DetailAdapter(this)
         binding.viewModel = detailViewModel
         binding.lifecycleOwner = viewLifecycleOwner
         binding.recyclerViewDish.apply {
@@ -47,20 +50,27 @@ class DetailFragment : Fragment() {
             setHasFixedSize(false)
         }
         // subscribeUi(dishAdapter)
-        detailViewModel.spinner.observe(viewLifecycleOwner) { show ->
-            binding.spinner.visibility = if (show) View.VISIBLE else View.GONE
-        }
         detailViewModel.snackbar.observe(viewLifecycleOwner) { text ->
             text?.let {
                 Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT).show()
                 detailViewModel.onSnackbarShown()
             }
         }
-        detailViewModel.dishesFlow.observe(viewLifecycleOwner){
-            Snackbar.make(binding.root, "Finished loading: ${it.toString()}", Snackbar.LENGTH_SHORT).show()
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            detailViewModel.dishEvent.collect { event ->
+                when (event){
+                    is DetailViewModel.DishEvent.NavigateToDishDetailScreen -> {
+                        findNavController().navigate(DetailFragmentDirections.actionDetailFragmentToDishDetailFragment(event.dish))
+                    }
+                }.exhaustive
+            }
         }
 
         return binding.root
+    }
+
+    override fun onItemClick(dish: Dishes) {
+        detailViewModel.onDishClicked(dish)
     }
 
 

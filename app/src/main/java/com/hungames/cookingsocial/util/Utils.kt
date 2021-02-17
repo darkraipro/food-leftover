@@ -12,3 +12,7 @@ fun convertDishQuantityToTextViewFormat(res: Resources, dish: Dishes): CharSeque
 fun convertDishPriceToTextViewFormat(res: Resources, dish: Dishes): CharSequence{
     return res.getString(R.string.dish_price_euro, dish.dishPrice)
 }
+
+// extension property: can now turn a statement into an expression
+val <T> T.exhaustive: T
+    get() = this

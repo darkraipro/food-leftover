@@ -20,7 +20,7 @@ interface DishesDao {
 
     // if interested buyer wants to order dishes, try to see if the dishes quantity is still valid
     @Query("SELECT * FROM dish WHERE uid = :uid AND id = :id AND quantity >= :quantity")
-    suspend fun checkDishQuantity(uid:String, id:Int, quantity: Int): Dishes?
+    fun checkDishQuantity(uid:String, id:Int, quantity: Int): Flow<Dishes?>
 
     @Insert
     suspend fun insertDish(dish: Dishes)

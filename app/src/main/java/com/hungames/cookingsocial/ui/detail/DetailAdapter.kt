@@ -10,7 +10,7 @@ import com.hungames.cookingsocial.databinding.ItemDishBinding
 import com.hungames.cookingsocial.util.TAG_DISH
 import timber.log.Timber
 
-class DetailAdapter: ListAdapter<Dishes, DetailAdapter.DishViewHolder>(DiffCallback()) {
+class DetailAdapter(private val listener: OnItemClickListener): ListAdapter<Dishes, DetailAdapter.DishViewHolder>(DiffCallback()){
 
     override fun onBindViewHolder(holder: DishViewHolder, position: Int) {
         val currentItem = getItem(position)
@@ -25,12 +25,35 @@ class DetailAdapter: ListAdapter<Dishes, DetailAdapter.DishViewHolder>(DiffCallb
 
 
 
-    class DishViewHolder(private val binding: ItemDishBinding): RecyclerView.ViewHolder(binding.root){
+
+
+    inner class DishViewHolder(private val binding: ItemDishBinding): RecyclerView.ViewHolder(binding.root){
+
+        init {
+            binding.apply {
+                root.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION){
+                        val position = adapterPosition
+                        // E.g , while an item is deleted and animated off the list, it has NO_POSITION, otherwise if cliced while animated, it will crash app
+                        if (position != RecyclerView.NO_POSITION){
+                            val dish = getItem(position)
+                            listener.onItemClick(dish)
+
+                        }
+                    }
+                }
+            }
+        }
         fun bind(dish: Dishes){
             Timber.tag(TAG_DISH).i("What is the dish to get bind: $dish")
             binding.dish = dish
             binding.executePendingBindings()
         }
+    }
+
+    interface OnItemClickListener{
+        fun onItemClick(dish: Dishes)
     }
 
     class DiffCallback: DiffUtil.ItemCallback<Dishes>(){

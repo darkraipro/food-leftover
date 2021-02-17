@@ -8,22 +8,18 @@
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.hungames.cookingsocial.ui.detail.DetailFragment"
-        android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" >
+        android:label="User Details"
+        tools:layout="@layout/fragment_detail">
         <action
             android:id="@+id/action_detailFragment_to_dishDetailFragment"
             app:destination="@id/dishDetailFragment" />
     </fragment>
-    <activity
-        android:id="@+id/detailActivity"
-        android:name="com.hungames.cookingsocial.ui.detail.DetailActivity"
-        android:label="activity_detail"
-        tools:layout="@layout/activity_detail" />
+
     <fragment
         android:id="@+id/dishDetailFragment"
         android:name="com.hungames.cookingsocial.ui.dish.DishDetailFragment"
-        android:label="fragment_dish_detail"
-        tools:layout="@layout/fragment_dish_detail" >
+        android:label="Dish Details"
+        tools:layout="@layout/fragment_dish_detail">
         <argument
             android:name="dish"
             app:argType="com.hungames.cookingsocial.data.model.Dishes" />

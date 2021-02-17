@@ -1,5 +1,6 @@
 package com.hungames.cookingsocial.util
 
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -26,4 +27,18 @@ fun bindDishQuantity(textview: TextView, dish: Dishes){
 @BindingAdapter("dishPrice")
 fun bindDishPrice(textview: TextView, dish: Dishes){
     textview.text = convertDishPriceToTextViewFormat(textview.resources, dish)
+}
+
+@BindingAdapter("spinWhileLoading")
+fun bindSpinner(spinner: ProgressBar, dishes: List<Dishes>?){
+    if (dishes != null){
+        spinner.visibility = ProgressBar.GONE
+    } else {
+        spinner.visibility = ProgressBar.VISIBLE
+    }
+}
+
+@BindingAdapter("spinWhileLoadingBool")
+fun bindProgressBar(spinner: ProgressBar, show: Boolean){
+    if (show) spinner.visibility = ProgressBar.VISIBLE else spinner.visibility = ProgressBar.GONE
 }

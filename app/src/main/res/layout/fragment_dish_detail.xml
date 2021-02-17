@@ -5,6 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.dish.DishDetailFragment">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.hungames.cookingsocial.ui.dish.DishDetailViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,6 +27,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:text="@{viewModel.dish.dishName}"
             tools:text="Spaghetti Carbonara" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -31,6 +38,7 @@
             android:ellipsize="end"
             android:gravity="start"
             android:maxLines="5"
+            android:text="@{viewModel.dish.dishDescription}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,6 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:text="@{viewModel.dish.nutritionType.name()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textview_"

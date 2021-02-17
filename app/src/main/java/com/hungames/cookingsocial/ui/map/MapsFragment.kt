@@ -73,7 +73,6 @@ class MapsFragment : Fragment() {
          */
         map = googleMap
         addressResultReceiver = AddressResultReceiver(Handler(Looper.getMainLooper()))
-        enableLocationAccess()
         if (hasPermission()){
             fusedLocationClient.lastLocation.addOnSuccessListener(requireActivity(), OnSuccessListener { location: Location? ->
                 if (location==null){
@@ -92,6 +91,7 @@ class MapsFragment : Fragment() {
         }else {
             requestPermission()
         }
+        enableLocationAccess()
         map.setOnInfoWindowClickListener(infoWindowClick)
 
     }
