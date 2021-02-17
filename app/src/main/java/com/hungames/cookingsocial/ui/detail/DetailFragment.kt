@@ -13,9 +13,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.hungames.cookingsocial.data.model.Dishes
 import com.hungames.cookingsocial.databinding.FragmentDetailBinding
 import com.hungames.cookingsocial.util.IntentSignals
+import com.hungames.cookingsocial.util.TAG_DISH
 import com.hungames.cookingsocial.util.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import timber.log.Timber
 import javax.inject.Inject
 
 // TODO: Add chipgroup to filter out dishes by NutritionType
@@ -56,6 +58,8 @@ class DetailFragment : Fragment(), DetailAdapter.OnItemClickListener {
                 detailViewModel.onSnackbarShown()
             }
         }
+        Timber.tag(TAG_DISH).i("Frag Manager backStackEntryCount: ${parentFragmentManager.backStackEntryCount}")
+        Timber.tag(TAG_DISH).i(parentFragmentManager.fragments.toString())
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             detailViewModel.dishEvent.collect { event ->
                 when (event){
