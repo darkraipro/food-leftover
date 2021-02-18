@@ -19,6 +19,7 @@
     <string name="register_failed">Registering failed due to connection error or a mail address has been used already.</string>
     <string name="map_location">MapLocation</string>
     <string name="title_detail_fragment">Details</string>
+    <string name="proceed_to_checkout">Proceed to Checkout</string>
 
 
     <string name="db_fail_login">Password or username is/are wrong.</string>

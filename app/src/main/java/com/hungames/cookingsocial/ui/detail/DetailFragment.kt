@@ -73,6 +73,9 @@ class DetailFragment : Fragment(), DetailAdapter.OnItemClickListener {
                     is DetailViewModel.DishEvent.NavigateToConfirmBuyOrder -> {
                         findNavController().navigate(DetailFragmentDirections.actionDetailFragmentToConfirmFoodList())
                     }
+                    else -> {
+
+                    }
                 }.exhaustive
             }
         }
