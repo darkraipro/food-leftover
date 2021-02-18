@@ -1,19 +1,16 @@
 package com.hungames.cookingsocial.ui.login
 
+import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import android.util.Patterns
 import androidx.lifecycle.viewModelScope
+import com.hungames.cookingsocial.R
 import com.hungames.cookingsocial.data.LoginRepository
 import com.hungames.cookingsocial.data.Result
-
-import com.hungames.cookingsocial.R
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ActivityScoped
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Singleton
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository) : ViewModel() {

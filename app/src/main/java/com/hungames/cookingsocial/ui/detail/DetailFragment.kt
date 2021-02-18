@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.snackbar.Snackbar
 import com.hungames.cookingsocial.data.model.Dishes
 import com.hungames.cookingsocial.databinding.FragmentDetailBinding
@@ -19,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
 // TODO: Add chipgroup to filter out dishes by NutritionType
 
@@ -29,13 +33,12 @@ class DetailFragment : Fragment(), DetailAdapter.OnItemClickListener {
     @Inject
     lateinit var detailViewModelFactory: DetailViewModel.AssistedFactory
 
-    private val detailViewModel: DetailViewModel by viewModels() {
+    private val detailViewModel: DetailViewModel by activityViewModels {
         DetailViewModel.provideFactory(
             detailViewModelFactory,
             requireActivity().intent.extras?.getParcelable(IntentSignals.USER_DATA)
         )
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,9 +65,13 @@ class DetailFragment : Fragment(), DetailAdapter.OnItemClickListener {
         Timber.tag(TAG_DISH).i(parentFragmentManager.fragments.toString())
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             detailViewModel.dishEvent.collect { event ->
+                // TODO: remove the option to select the dish to display more information. Instead change itemholder to display all information. Refactor DetailAdapter and VM
                 when (event){
                     is DetailViewModel.DishEvent.NavigateToDishDetailScreen -> {
-                        findNavController().navigate(DetailFragmentDirections.actionDetailFragmentToDishDetailFragment(event.dish))
+
+                    }
+                    is DetailViewModel.DishEvent.NavigateToConfirmBuyOrder -> {
+                        findNavController().navigate(DetailFragmentDirections.actionDetailFragmentToConfirmFoodList())
                     }
                 }.exhaustive
             }
@@ -75,6 +82,18 @@ class DetailFragment : Fragment(), DetailAdapter.OnItemClickListener {
 
     override fun onItemClick(dish: Dishes) {
         detailViewModel.onDishClicked(dish)
+    }
+
+    override fun onCheckBoxUnClick(dish: Dishes, editText: EditText) {
+        detailViewModel.onDishCheckBoxUnClicked(dish, editText)
+    }
+
+    override fun onCheckBoxClick(dish: Dishes, quantity: Int, checkboxWantToBuy: MaterialCheckBox, editText: EditText) {
+        detailViewModel.onDishCheckBoxClicked(dish, quantity, checkboxWantToBuy, editText)
+    }
+
+    override fun onErrorCheck(msg: String) {
+        detailViewModel.displayTextMessage(msg)
     }
 
 

@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_detailFragment_to_dishDetailFragment"
             app:destination="@id/dishDetailFragment" />
+        <action
+            android:id="@+id/action_detailFragment_to_confirmFoodList"
+            app:destination="@id/confirmDishList" />
     </fragment>
 
     <fragment
@@ -27,4 +30,9 @@
             android:id="@+id/action_dishDetailFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/confirmDishList"
+        android:name="com.hungames.cookingsocial.ui.buyprocess.ConfirmDishListFragment"
+        android:label="Food List Summary"
+        tools:layout="@layout/confirm_dish_list_fragment" />
 </navigation>

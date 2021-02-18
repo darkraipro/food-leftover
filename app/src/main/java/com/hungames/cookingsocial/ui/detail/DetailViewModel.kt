@@ -1,6 +1,8 @@
 package com.hungames.cookingsocial.ui.detail
 
+import android.widget.EditText
 import androidx.lifecycle.*
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.hungames.cookingsocial.data.DishesRepository
 import com.hungames.cookingsocial.data.model.Dishes
 import com.hungames.cookingsocial.data.model.UserNeighbors
@@ -12,6 +14,9 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+
+const val TOO_MUCH_TO_ORDER = "Quantity is over the limit"
+const val NO_DISH_SELECTED = "Select at least one dish"
 
 class DetailViewModel @AssistedInject constructor(
     private val dishRepository: DishesRepository,
@@ -36,6 +41,8 @@ class DetailViewModel @AssistedInject constructor(
     private val dishEventChannel = Channel<DishEvent>()
     val dishEvent = dishEventChannel.receiveAsFlow()
 
+    val _dishList = HashMap<Long, Pair<Dishes, Int>>()
+
     init {
         Timber.tag(TAG_DISH).i("Init DetailVM. Getting foods.")
         Timber.tag(TAG_DISH).i("With user: $user")
@@ -56,8 +63,42 @@ class DetailViewModel @AssistedInject constructor(
         dishEventChannel.send(DishEvent.NavigateToDishDetailScreen(dish))
     }
 
-    sealed class DishEvent{
-        data class NavigateToDishDetailScreen(val dish: Dishes): DishEvent()
+    fun onDishCheckBoxClicked(
+        dish: Dishes,
+        quantity: Int,
+        checkBox: MaterialCheckBox,
+        editText: EditText
+    ) {
+        if (quantity > dish.quantity) {
+            displayTextMessage(TOO_MUCH_TO_ORDER)
+            checkBox.isChecked = false
+        } else {
+            _dishList[dish.id] = Pair(dish, quantity)
+            editText.isEnabled = false
+
+        }
+    }
+
+    fun onDishCheckBoxUnClicked(dish: Dishes, editText: EditText) {
+        _dishList.remove(dish.id)
+        editText.isEnabled = true
+    }
+
+    fun onBuyFloatButtonClicked() = viewModelScope.launch {
+        if (_dishList.isNotEmpty()) {
+            dishEventChannel.send(DishEvent.NavigateToConfirmBuyOrder)
+        } else {
+            displayTextMessage(NO_DISH_SELECTED)
+        }
+    }
+
+    fun displayTextMessage(msg: String) {
+        _snackbar.value = msg
+    }
+
+    sealed class DishEvent {
+        data class NavigateToDishDetailScreen(val dish: Dishes) : DishEvent()
+        object NavigateToConfirmBuyOrder: DishEvent()
     }
 
     @dagger.assisted.AssistedFactory

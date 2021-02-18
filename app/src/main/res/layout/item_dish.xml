@@ -114,7 +114,8 @@
                 android:gravity="center"
                 android:importantForAutofill="no"
                 android:inputType="numberSigned"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:imeOptions="actionDone" />
         </com.google.android.material.textfield.TextInputLayout>
 
 

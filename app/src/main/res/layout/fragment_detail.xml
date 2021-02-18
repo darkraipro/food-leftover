@@ -81,6 +81,7 @@
                 android:layout_gravity="bottom|end"
                 android:layout_margin="16dp"
                 android:contentDescription="@string/order_continue"
+                android:onClick="@{() -> viewModel.onBuyFloatButtonClicked()}"
                 android:src="@drawable/ic_baseline_add_24" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
