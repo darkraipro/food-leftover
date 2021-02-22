@@ -3,6 +3,7 @@ package com.hungames.cookingsocial.util
 const val TAG_LOGIN = "LOGIN"
 const val TAG_MAP = "MAP"
 const val TAG_DISH = "DISH"
+const val TAG_SETTING = "SETTING"
 
 object IntentSignals{
     const val USER_DATA = "USER_DATA"
@@ -22,4 +23,8 @@ enum class NutritionType{
     MEAT,
     VEGETARIAN,
     VEGAN;
+}
+
+object LoginConstants {
+    const val LOGGED_IN = "logged_in"
 }

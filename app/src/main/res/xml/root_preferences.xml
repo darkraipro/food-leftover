@@ -5,7 +5,12 @@
         <EditTextPreference
             app:key="signature"
             app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
+            app:summary="Your signature"
+            app:useSimpleSummaryProvider="false"
+            app:dialogTitle="Digital Signature"
+            app:dialogMessage="Enter your digital signature hash"
+            app:iconSpaceReserved="true"
+            app:icon="@drawable/ic_baseline_ac_unit_24"/>
 
         <ListPreference
             app:defaultValue="reply"
@@ -14,6 +19,13 @@
             app:key="reply"
             app:title="@string/reply_title"
             app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            app:fragment="com.hungames.cookingsocial.settings.UserSettingFragment"
+            app:key="user_profile"
+            app:title="User Account"
+            app:icon="@drawable/ic_baseline_supervised_user_circle_24"
+        />
 
     </PreferenceCategory>
 

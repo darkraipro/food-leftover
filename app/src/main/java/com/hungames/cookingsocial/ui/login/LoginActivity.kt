@@ -15,11 +15,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import com.hungames.cookingsocial.LoginStatusViewModel
 import com.hungames.cookingsocial.MainActivity
 import com.hungames.cookingsocial.R
 import com.hungames.cookingsocial.data.PreferencesManager
 import com.hungames.cookingsocial.databinding.ActivityLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,12 +31,20 @@ import javax.inject.Singleton
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
+    /**
+     * for handling login UI and repository calls
+     */
     @Singleton
     private val loginViewModel: LoginViewModel by viewModels()
 
+    /**
+     * for handling status of Login. This model is also used by other activities
+      */
+    @Singleton
+    private val loginStatusViewModel: LoginStatusViewModel by viewModels()
+
     @Inject
     lateinit var preferenceManager: PreferencesManager
-
 
     private lateinit var loginDataBinding: ActivityLoginBinding
 
@@ -76,10 +86,8 @@ class LoginActivity : AppCompatActivity() {
             }
             if (loginResult.success != null) {
                 // TODO: add more keys and storage to save user profile and get them at appropriate time
-                lifecycleScope.launch { preferenceManager.setLoginStatus(true) }
+                loginStatusViewModel.sendEventLogin()
                 updateUiWithUser(loginResult.success)
-                setResult(Activity.RESULT_OK)
-                finish()
             }
 
             //Complete and destroy login activity once successful
@@ -94,6 +102,23 @@ class LoginActivity : AppCompatActivity() {
                 // do some work perhaps cleaning fields
             }
         })
+
+        lifecycleScope.launchWhenStarted {
+            loginStatusViewModel.statusEvent.collect { event ->
+                when (event){
+                    LoginStatusViewModel.StatusEvent.Login -> {
+                        // Login
+                        navigateToMainActivity()
+                        setResult(Activity.RESULT_OK)
+                        finish()
+                    }
+                    else -> {
+                        // Logout
+                    }
+                }
+
+            }
+        }
 
         username.afterTextChanged {
             loginViewModel.loginDataChanged(

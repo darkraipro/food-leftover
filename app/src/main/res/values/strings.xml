@@ -20,6 +20,7 @@
     <string name="map_location">MapLocation</string>
     <string name="title_detail_fragment">Details</string>
     <string name="proceed_to_checkout">Proceed to Checkout</string>
+    <string name="setting">Setting</string>
 
 
     <string name="db_fail_login">Password or username is/are wrong.</string>
@@ -56,5 +57,7 @@
     <string name="title_notifications">Notifications</string>
     <string name="map">Map</string>
     <string name="back">Back</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

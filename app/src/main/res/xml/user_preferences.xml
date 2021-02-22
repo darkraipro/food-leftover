@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="Preference category"
+        app:title="General Setting">
+
+        <Preference
+            app:key="test_pref"
+            app:title="Version"
+            app:iconSpaceReserved="false"
+            />
+        <com.hungames.cookingsocial.settings.LogoutPreference
+            app:key="pref_logout"
+            app:dialogTitle="Are you sure that you want to log out!"
+            app:positiveButtonText="Log out"
+            app:negativeButtonText="Cancel"
+            app:title="Logout"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
